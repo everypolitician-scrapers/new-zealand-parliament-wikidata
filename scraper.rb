@@ -14,6 +14,13 @@ def noko_for(url)
   Nokogiri::HTML(open(URI.escape(URI.unescape(url))).read) 
 end
 
+def wikidata_ids
+  # Member of 51st New Zealand Parliament
+  url = 'https://wdq.wmflabs.org/api?q=claim[463:4640115]'
+  json = JSON.parse(open(url).read, symbolize_names: true)
+  json[:items].map { |id| "Q#{id}" }
+end
+
 def wikinames_from(url)
   noko = noko_for(url)
             # numrows => wanted
@@ -25,7 +32,7 @@ def wikinames_from(url)
 
   partylist = noko.xpath('//h3[span[@id="List_results"]]/following-sibling::table[1]//tr[3]//a[not(@class="new")]/@title').map(&:text)
 
-  return electorate + partylist 
+  return (electorate + partylist + wikidata_ids).uniq
 end
 
 def fetch_info(names)

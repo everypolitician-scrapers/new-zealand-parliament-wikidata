@@ -1,6 +1,7 @@
 #!/bin/env ruby
 # encoding: utf-8
 
+require 'rest-client'
 require 'scraperwiki'
 require 'wikidata/fetcher'
 require 'nokogiri'
@@ -48,3 +49,5 @@ def fetch_info(names)
 end
 
 fetch_info wikinames_from('https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014')
+warn RestClient.post ENV['MORPH_REBUILDER_URL'], {} if ENV['MORPH_REBUILDER_URL']
+

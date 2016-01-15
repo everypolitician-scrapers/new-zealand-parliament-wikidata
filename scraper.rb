@@ -15,13 +15,6 @@ def noko_for(url)
   Nokogiri::HTML(open(URI.escape(URI.unescape(url))).read) 
 end
 
-def wikidata_ids
-  # Member of 51st New Zealand Parliament
-  url = 'https://wdq.wmflabs.org/api?q=claim[463:4640115]'
-  json = JSON.parse(open(url).read, symbolize_names: true)
-  json[:items].map { |id| "Q#{id}" }
-end
-
 def wikinames_from(url)
   noko = noko_for(url)
             # numrows => wanted
@@ -33,21 +26,12 @@ def wikinames_from(url)
 
   partylist = noko.xpath('//h3[span[@id="List_results"]]/following-sibling::table[1]//tr[3]//a[not(@class="new")]/@title').map(&:text)
 
-  return (electorate + partylist + wikidata_ids).uniq
+  hardcoded = [ 'Ria Bond' ]
+  return (electorate + partylist + hardcoded).uniq
 end
 
-def fetch_info(names)
-  WikiData.ids_from_pages('en', names).each do |name, id|
-    data = WikiData::Fetcher.new(id: id).data rescue nil
-    unless data
-      warn "No data for #{p}"
-      next
-    end
-    data[:original_wikiname] = name
-    ScraperWiki.save_sqlite([:id], data)
-  end
-end
+names = wikinames_from('https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014')
+EveryPolitician::Wikidata.scrape_wikidata(names: { en: names }, output: true)
+warn EveryPolitician::Wikidata.notify_rebuilder
 
-fetch_info wikinames_from('https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014')
-warn RestClient.post ENV['MORPH_REBUILDER_URL'], {} if ENV['MORPH_REBUILDER_URL']
 

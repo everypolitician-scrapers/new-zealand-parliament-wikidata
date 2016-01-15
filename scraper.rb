@@ -31,7 +31,7 @@ def wikinames_from(url)
 end
 
 names = wikinames_from('https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014')
-EveryPolitician::Wikidata.scrape_wikidata(names: { en: names }, output: true)
+EveryPolitician::Wikidata.scrape_wikidata(names: { en: names }, output: false)
 warn EveryPolitician::Wikidata.notify_rebuilder
 
 

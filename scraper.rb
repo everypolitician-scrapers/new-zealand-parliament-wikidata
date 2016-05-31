@@ -15,15 +15,10 @@ party = EveryPolitician::Wikidata.wikipedia_xpath(
   xpath: '//table[.//tr[1]//td[.="National"]]//tr[position() > 1]/td//a[not(@class="new")]/@title',
 )
 
-term_50 = EveryPolitician::Wikidata.wikipedia_xpath(
-  url: 'https://en.wikipedia.org/wiki/50th_New_Zealand_Parliament',
-  after: '//span[@id="Members"]',
-  before: '//span[@id="Parliamentary_business"]',
-  xpath: '//table//tr//td[2]//a[not(@class="new")]/@title',
-)
+wikipedia = EveryPolitician::Wikidata.morph_wikinames(source: 'everypolitician-scrapers/new-zealand-parliament-wikipedia', column: 'wikiname')
 
 extras = [ 'Ria Bond', 'Maureen Pugh', 'Marama Davidson' ]
 
-EveryPolitician::Wikidata.scrape_wikidata(names: { en: electorate | party | term_50 | extras }, output: false)
+EveryPolitician::Wikidata.scrape_wikidata(names: { en: electorate | party | wikipedia | extras }, output: false)
 
 

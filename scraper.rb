@@ -17,7 +17,7 @@ party = EveryPolitician::Wikidata.wikipedia_xpath(
 
 wikipedia = EveryPolitician::Wikidata.morph_wikinames(source: 'everypolitician-scrapers/new-zealand-parliament-wikipedia', column: 'wikiname')
 
-extras = [ 'Ria Bond', 'Maureen Pugh', 'Marama Davidson', 'Barry Coates' ]
+extras = [ 'Ria Bond', 'Maureen Pugh', 'Marama Davidson', 'Barry Coates', 'Michael Wood (New Zealand politician)' ]
 
 EveryPolitician::Wikidata.scrape_wikidata(names: { en: electorate | party | wikipedia | extras }, output: false)
 

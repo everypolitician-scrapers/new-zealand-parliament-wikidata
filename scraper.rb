@@ -17,8 +17,22 @@ party = EveryPolitician::Wikidata.wikipedia_xpath(
 
 wikipedia = EveryPolitician::Wikidata.morph_wikinames(source: 'everypolitician-scrapers/new-zealand-parliament-wikipedia', column: 'wikiname')
 
-extras = [ 'Ria Bond', 'Maureen Pugh', 'Marama Davidson', 'Barry Coates', 'Michael Wood (New Zealand politician)' ]
+# Find all members of (terms that started after 2002)
+query = <<EOS
+  SELECT DISTINCT ?item
+  WHERE
+  {
+    BIND(wd:Q18145518 AS ?membership)
+    ?item p:P39 ?position_statement .
+    ?position_statement ps:P39 ?membership .
+    ?position_statement pq:P2937 ?term .
+    ?term wdt:P571 ?start
+    FILTER (?start >= "2002-01-01T00:00:00Z"^^xsd:dateTime) .
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "en" . }
+  }
+EOS
+p39s = EveryPolitician::Wikidata.sparql(query)
 
-EveryPolitician::Wikidata.scrape_wikidata(names: { en: electorate | party | wikipedia | extras }, output: false)
+EveryPolitician::Wikidata.scrape_wikidata(ids: p39s, names: { en: electorate | party | wikipedia })
 
 

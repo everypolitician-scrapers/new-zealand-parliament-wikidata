@@ -3,12 +3,24 @@
 
 require 'wikidata/fetcher'
 
-electorate = EveryPolitician::Wikidata.wikipedia_xpath(
+electorate_2017 = EveryPolitician::Wikidata.wikipedia_xpath(
+  url: 'https://en.wikipedia.org/wiki/Template:New_Zealand_general_election,_2017,_by_electorate',
+  xpath: '//table[.//caption[contains(.,"Electorate results")]]//td[position() = last() - 5]//a[not(@class="new")]/@title',
+)
+
+party_2017 = EveryPolitician::Wikidata.wikipedia_xpath(
+  url: 'https://en.wikipedia.org/wiki/Results_of_the_New_Zealand_general_election,_2017',
+  after: '//span[@id="List_results"]',
+  before: '//span[@id="Unsuccessful_list_candidates"]',
+  xpath: '//table[.//tr[1]//td[.="National"]]//tr[position() > 1]/td//a[not(@class="new")]/@title',
+)
+
+electorate_2014 = EveryPolitician::Wikidata.wikipedia_xpath(
   url: 'https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014',
   xpath: '//table[.//caption[contains(.,"Electorate results")]]//td[position() = last() - 5]//a[not(@class="new")]/@title',
 )
 
-party = EveryPolitician::Wikidata.wikipedia_xpath(
+party_2014 = EveryPolitician::Wikidata.wikipedia_xpath(
   url: 'https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014',
   after: '//span[@id="List_results"]',
   before: '//span[@id="Unsuccessful_list_candidates"]',
@@ -33,6 +45,6 @@ query = <<EOS
 EOS
 p39s = EveryPolitician::Wikidata.sparql(query)
 
-EveryPolitician::Wikidata.scrape_wikidata(ids: p39s, names: { en: electorate | party | wikipedia })
+EveryPolitician::Wikidata.scrape_wikidata(ids: p39s, names: { en: electorate_2017 | electorate_2014 | party_2017 | party_2017 | wikipedia })
 
 

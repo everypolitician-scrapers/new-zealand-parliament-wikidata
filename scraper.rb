@@ -12,7 +12,7 @@ party_2017 = EveryPolitician::Wikidata.wikipedia_xpath(
   url: 'https://en.wikipedia.org/wiki/Results_of_the_New_Zealand_general_election,_2017',
   after: '//span[@id="List_results"]',
   before: '//span[@id="Unsuccessful_list_candidates"]',
-  xpath: '//table[.//tr[1]//td[.="National"]]//tr[position() > 1]/td//a[not(@class="new")]/@title',
+  xpath: '//table[.//tr[1]//td[contains(.,"National")]]//tr[position() > 1]/td//a[not(@class="new")]/@title',
 )
 
 electorate_2014 = EveryPolitician::Wikidata.wikipedia_xpath(
@@ -24,7 +24,7 @@ party_2014 = EveryPolitician::Wikidata.wikipedia_xpath(
   url: 'https://en.wikipedia.org/wiki/New_Zealand_general_election,_2014',
   after: '//span[@id="List_results"]',
   before: '//span[@id="Unsuccessful_list_candidates"]',
-  xpath: '//table[.//tr[1]//td[.="National"]]//tr[position() > 1]/td//a[not(@class="new")]/@title',
+  xpath: '//table[.//tr[1]//td[contains(.,"National")]]//tr[position() > 1]/td//a[not(@class="new")]/@title',
 )
 
 wikipedia = EveryPolitician::Wikidata.morph_wikinames(source: 'everypolitician-scrapers/new-zealand-parliament-wikipedia', column: 'wikiname')
